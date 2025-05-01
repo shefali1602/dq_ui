@@ -1,19 +1,44 @@
 body {
-    background-color: #f0f4fa;
+    background: linear-gradient(to bottom, #e9f1fa, #f8fbfd);
+    font-family: "Segoe UI", sans-serif;
 }
 
-.container {
-    max-width: 900px;
-    margin-top: 30px;
+.logo {
+    height: 40px;
 }
 
-h1, h2, h4 {
+.app-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px;
+}
+
+.app-header h4 {
     color: #0d6efd;
+    margin: 0;
 }
 
-.card {
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+.landing-card {
+    border: 2px dashed #c3d2e0;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    max-width: 600px;
+    margin: 60px auto;
+}
+
+.landing-card h2 {
+    color: #0d6efd;
+    margin-bottom: 20px;
+}
+
+.landing-card p {
+    color: #5a6a7f;
+    font-size: 1rem;
+    margin-bottom: 30px;
 }
 
 .btn-primary {
@@ -22,5 +47,11 @@ h1, h2, h4 {
 }
 
 .btn-primary:hover {
-    background-color: #0b5ed7;
+    background-color: #084fc7;
+}
+
+@media (max-width: 576px) {
+    .landing-card {
+        padding: 20px;
+    }
 }
