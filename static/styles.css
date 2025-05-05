@@ -1,57 +1,57 @@
 body {
-    background: linear-gradient(to bottom, #e9f1fa, #f8fbfd);
+    background-color: #f5f8fc;
     font-family: "Segoe UI", sans-serif;
-}
-
-.logo {
-    height: 40px;
-}
-
-.app-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 20px;
-}
-
-.app-header h4 {
-    color: #0d6efd;
     margin: 0;
-}
-
-.landing-card {
-    border: 2px dashed #c3d2e0;
-    background: #ffffff;
+    padding: 0;
+    min-height: 100vh;
+  }
+  
+  .container {
+    max-width: 900px;
+  }
+  
+  .app-header {
+    background-color: white;
+    border-bottom: 1px solid #e3e6eb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  }
+  
+  .logo {
+    height: 40px;
+  }
+  
+  .welcome-card {
+    border: 1.5px dashed #c5d1e0;
+    background-color: white;
     padding: 40px;
     border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-    text-align: center;
-    max-width: 600px;
-    margin: 60px auto;
-}
-
-.landing-card h2 {
+    margin: 80px auto;
+    max-width: 700px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+  }
+  
+  .welcome-card h2 {
     color: #0d6efd;
-    margin-bottom: 20px;
-}
-
-.landing-card p {
-    color: #5a6a7f;
+    margin-bottom: 12px;
+  }
+  
+  .welcome-card p {
+    color: #555;
     font-size: 1rem;
-    margin-bottom: 30px;
-}
-
-.btn-primary {
+    margin: 0;
+  }
+  
+  .btn-outline-primary,
+  .btn-outline-secondary {
+    font-weight: 500;
+  }
+  
+  .btn-primary {
     background-color: #0d6efd;
     border: none;
-}
-
-.btn-primary:hover {
-    background-color: #084fc7;
-}
-
-@media (max-width: 576px) {
-    .landing-card {
-        padding: 20px;
-    }
-}
+  }
+  
+  .btn-primary:hover {
+    background-color: #0b5ed7;
+  }
+  
