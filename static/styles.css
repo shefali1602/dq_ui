@@ -1,57 +1,102 @@
 body {
-    background-color: #f5f8fc;
+    background: #f8f9fa;
     font-family: "Segoe UI", sans-serif;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
   }
   
-  .container {
-    max-width: 900px;
-  }
-  
+  /* Header styling */
   .app-header {
-    background-color: white;
-    border-bottom: 1px solid #e3e6eb;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    background-color: #ffffff;
+    border-bottom: 1px solid #dee2e6;
   }
   
   .logo {
     height: 40px;
   }
   
-  .welcome-card {
-    border: 1.5px dashed #c5d1e0;
-    background-color: white;
-    padding: 40px;
-    border-radius: 12px;
-    margin: 80px auto;
-    max-width: 700px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
-  }
-  
-  .welcome-card h2 {
-    color: #0d6efd;
-    margin-bottom: 12px;
-  }
-  
-  .welcome-card p {
-    color: #555;
-    font-size: 1rem;
-    margin: 0;
-  }
-  
-  .btn-outline-primary,
-  .btn-outline-secondary {
+  /* Add Record Button */
+  .btn-add-record {
+    background-color: #0d6efd;
+    color: white;
     font-weight: 500;
   }
   
-  .btn-primary {
-    background-color: #0d6efd;
-    border: none;
+  .btn-add-record:hover {
+    background-color: #084fc7;
+    color: white;
   }
   
-  .btn-primary:hover {
-    background-color: #0b5ed7;
+  /* Card section for dropdown */
+  .select-id-section {
+    background-color: #0d6efd;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    color: white;
+    position: relative;
+    overflow: visible;
+  }
+  
+  /* Welcome card */
+  .welcome-card {
+    margin-top: 40px;
+    padding: 40px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Choices.js select box adjustments */
+  .choices {
+    width: 100% !important;
+  }
+  
+  .choices__inner {
+    height: 45px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    background-color: white;
+    border: 1px solid #d0d7e2;
+    font-size: 1rem;
+  }
+  
+  .choices__list--dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    background: white;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .choices__item--selectable {
+    padding: 10px 12px;
+    cursor: pointer;
+  }
+  
+  .choices__placeholder {
+    color: #888;
+    font-style: italic;
+  }
+  
+  /* Add New Record section header */
+  .text-add-record {
+    color: #0b5ed7;
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+  
+  /* Form spacing */
+  label.form-label {
+    font-weight: 500;
+  }
+  
+  input.form-control, .form-control.bg-light {
+    border-radius: 6px;
   }
   
