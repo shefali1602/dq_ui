@@ -2,178 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Data Quality Tool</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Project Layout</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Header -->
-  <div class="app-header px-4 py-3 d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center">
-      <img src="{{ url_for('static', filename='logo.png') }}" class="logo me-2" />
-      <h4 class="mb-0 text-primary">Data Quality Tool</h4>
-    </div>
-    {% if request.args.get('mode') != 'add' %}
-      <a href="{{ url_for('index', mode='add') }}" class="btn btn-add-record">➕ Add New Record</a>
-    {% else %}
-      <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">← Back</a>
-    {% endif %}
+  <!-- Header with logo -->
+  <div class="header">
+    <img src="/static/logo.png" alt="Logo" class="logo" />
+    <p class="logo-title">Data Quality Tool</p>
   </div>
 
-  <div class="container py-4">
-    {% if request.args.get('mode') == 'add' %}
-    <div id="main-content" class="card p-4 shadow-sm">
-      <h5 class="mb-4 text-add-record">Add New Record</h5>
-      <form method="POST" action="/add">
-        <div class="row">
-          <!-- File Fields -->
-          <div class="col-md-6">
-            <div class="accordion" id="fileFieldsAccordion">
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="fileFieldsHeading">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fileFields">
-                    📁 File Fields
-                  </button>
-                </h2>
-                <div id="fileFields" class="accordion-collapse collapse show">
-                  <div class="accordion-body">
-                    {% for field in ['PROJID', 'DS_SOURCE', 'SOURCEFILE', 'SOURCEDIR', 'SOURCETABLE', 'SOURCECOLUMNS', 'NULLLOGFILE', 'DUPLICATELOGFILE', 'OUTPUTPATH'] %}
-                    <div class="row align-items-center mb-2">
-                      <label class="col-auto col-form-label-sm fw-medium">{{ field }}:</label>
-                      <div class="col">
-                        <input type="text" name="{{ field }}" class="form-control form-control-sm" required />
-                      </div>
-                    </div>
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+  <div class="container">
 
-          <!-- DB Fields -->
-          <div class="col-md-6">
-            <div class="accordion" id="dbFieldsAccordion">
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="dbFieldsHeading">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dbFields">
-                    🗄️ Database Fields
-                  </button>
-                </h2>
-                <div id="dbFields" class="accordion-collapse collapse show">
-                  <div class="accordion-body">
-                    {% for field in ['PKCOL', 'DBSCHEMA', 'TARGETLOGTABLE', 'DB_HOST', 'PORT', 'SERVICENAME', 'DBUSER', 'DBENCKEY', 'CHUNKSIZE'] %}
-                    <div class="row align-items-center mb-2">
-                      <label class="col-auto col-form-label-sm fw-medium">{{ field }}:</label>
-                      <div class="col">
-                        <input type="{{ 'password' if field == 'DBENCKEY' else 'text' }}" name="{{ field }}" class="form-control form-control-sm" required />
-                      </div>
-                    </div>
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="text-end mt-4">
-          <button type="submit" class="btn btn-primary">Save Record</button>
-        </div>
-      </form>
-    </div>
-    {% endif %}
-
-    {% if request.args.get('mode') != 'add' %}
-    <div class="card select-id-section">
-      <form method="POST" action="/" class="row align-items-end g-3">
-        <div class="col-md-9">
-          <label class="form-label text-white">Select Project ID</label>
-          <select id="projectDropdown" name="selected_id" required>
-            {% for id in ids %}
-              <option value="{{ id }}" {% if id == selected_id %}selected{% endif %}>{{ id }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="col-md-3">
-          <label class="form-label invisible">Submit</label>
-          <button type="submit" class="btn btn-primary w-100">View Details</button>
-        </div>
-      </form>
+    <!-- Add New Record Button -->
+    <div class="add-record">
+      <button onclick="location.href='add-record.html'">Add New Record</button>
     </div>
 
-    {% if not selected_id %}
-    <div class="welcome-card text-center">
-      <h2>Welcome to the DQ Configurator</h2>
-      <p>Select a project from the dropdown above to view configuration details.</p>
-    </div>
-    {% endif %}
-
-    {% if selected_data %}
-    {% set labels = [
-      'DS_SOURCE', 'SOURCEFILE', 'SOURCEDIR', 'SOURCETABLE',
-      'SOURCECOLUMNS', 'NULLLOGFILE', 'DUPLICATELOGFILE', 'OUTPUTPATH',
-      'PKCOL', 'DBSCHEMA', 'TARGETLOGTABLE', 'DB_HOST', 'PORT',
-      'SERVICENAME', 'DBUSER', 'DBENCKEY', 'CHUNKSIZE'
-    ] %}
-    <div id="main-content" class="card p-4 shadow-sm">
-      <h5 class="mb-4">Project Details - ID: {{ selected_data[0] }}</h5>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="accordion" id="viewFileFieldsAccordion">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="viewFileFieldsHeading">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#viewFileFields">
-                  📁 File Fields
-                </button>
-              </h2>
-              <div id="viewFileFields" class="accordion-collapse collapse show">
-                <div class="accordion-body">
-                  {% for i in range(1, 10) %}
-                  <div class="row align-items-center mb-2">
-                    <label class="col-auto col-form-label-sm fw-medium">{{ labels[i-1] }}:</label>
-                    <div class="col">
-                      <div class="form-control bg-light form-control-sm">{{ selected_data[i] }}</div>
-                    </div>
-                  </div>
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="accordion" id="viewDbFieldsAccordion">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="viewDbFieldsHeading">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#viewDbFields">
-                  🗄️ Database Fields
-                </button>
-              </h2>
-              <div id="viewDbFields" class="accordion-collapse collapse show">
-                <div class="accordion-body">
-                  {% for i in range(10, 18) %}
-                  <div class="row align-items-center mb-2">
-                    <label class="col-auto col-form-label-sm fw-medium">{{ labels[i-1] }}:</label>
-                    <div class="col">
-                      <div class="form-control bg-light form-control-sm">{{ selected_data[i] }}</div>
-                    </div>
-                  </div>
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <!-- Block 1: Project Details -->
+    <div class="block block1">
+      <div class="block-header">
+        <h3>Project Details</h3>
+        <button class="view-btn">View Details</button>
+      </div>
+      <div class="field">
+        <label for="projid">PROJID</label>
+        <input type="text" id="projid" />
+      </div>
+      <div class="field">
+        <label for="date">Date of Validation</label>
+        <input type="date" id="date" />
       </div>
     </div>
-    {% endif %}
-    {% endif %}
+
+    <!-- DS_Source Toggle -->
+    <div class="ds-source-toggle">
+      <button onclick="toggleDsSource()">DS_Source ▼</button>
+    </div>
+
+    <!-- DS_Source Blocks -->
+    <div id="dsSourceSection" class="ds-source">
+      <!-- Block 2: Source File Details -->
+      <div class="block block2">
+        <h3>Source File Details</h3>
+        <div class="field"><label>SOURCEFILE</label><input type="text" /></div>
+        <div class="field"><label>SOURCEDIR</label><input type="text" /></div>
+        <div class="field"><label>NULLLOGFILE</label><input type="text" /></div>
+        <div class="field"><label>DUPLICATELOGFILE</label><input type="text" /></div>
+        <div class="field"><label>OUTPUTPATH</label><input type="text" /></div>
+      </div>
+
+      <!-- Block 3: Source Table Details -->
+      <div class="block block3">
+        <h3>Source Table Details</h3>
+        <div class="field"><label>SOURCETABLE</label><input type="text" /></div>
+        <div class="field"><label>SOURCECOLUMNS</label><input type="text" /></div>
+        <div class="field"><label>PKCOL</label><input type="text" /></div>
+      </div>
+    </div>
+
+    <!-- Block 4: Connection Details -->
+    <div class="block block4">
+      <h3>Connection Details</h3>
+      <div class="field"><label>DBSCHEMA</label><input type="text" /></div>
+      <div class="field"><label>DB_HOST</label><input type="text" /></div>
+      <div class="field"><label>PORT</label><input type="text" /></div>
+      <div class="field"><label>SERVICENAME</label><input type="text" /></div>
+      <div class="field"><label>DBUSER</label><input type="text" /></div>
+      <div class="field"><label>DBENCKEY</label><input type="text" /></div>
+      <div class="field"><label>CHUNKSIZE</label><input type="text" /></div>
+    </div>
+
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script src="script.js"></script>
 </body>
 </html>

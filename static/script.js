@@ -27,4 +27,16 @@ document.addEventListener('DOMContentLoaded', function () {
   
     observer.observe(document.body, { childList: true, subtree: true });
   });
+
+  function toggleDsSource() {
+    const section = document.getElementById("dsSourceSection");
+    const btn = document.querySelector(".ds-source-toggle button");
   
+    if (section.style.display === "none" || section.style.display === "") {
+      section.style.display = "flex";
+      btn.textContent = "DS_Source ▼";
+    } else {
+      section.style.display = "none";
+      btn.textContent = "DS_Source ▶";
+    }
+  }
