@@ -1,45 +1,58 @@
-
 body {
-  background: #f8f9fa;
+  background-color: #f8f9fa;
   font-family: "Segoe UI", sans-serif;
 }
+
+/* Header Logo */
 .logo {
   height: 40px;
 }
-.btn-add-record {
-  background-color: #0d6efd;
-  color: white;
-  font-weight: 500;
+
+/* Header Buttons */
+.btn-add-record,
+.btn-sm {
+  font-size: 0.85rem;
+  padding: 0.3rem 0.75rem;
 }
-.btn-add-record:hover {
-  background-color: #084fc7;
+
+/* Section Titles */
+h6 {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #0d6efd;
+  margin-bottom: 0.75rem;
 }
-.select-id-section {
-  background-color: #0d6efd;
-  border-radius: 12px;
-  padding: 30px;
-  margin-bottom: 30px;
-  color: white;
-  position: relative;
-  overflow: visible;
-}
-.welcome-card {
-  margin-top: 40px;
-  padding: 40px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
+
+/* Label Styles */
 label.col-form-label-sm {
   font-size: 0.85rem;
   font-weight: 500;
   white-space: nowrap;
+  margin-bottom: 0;
 }
-input.form-control-sm {
+
+/* Compact Textareas */
+textarea.form-control-sm {
   font-size: 0.85rem;
-  height: calc(1.5em + 0.5rem + 2px);
-  padding: 0.25rem 0.5rem;
+  padding: 4px 8px;
+  resize: none;
+  height: auto;
 }
+
+/* Input Row Alignment */
 .row.align-items-center.mb-2 {
   gap: 6px;
+}
+
+/* Card Styling */
+.card {
+  border-radius: 10px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+/* Optional for small dropdown */
+select.form-select-sm {
+  font-size: 0.85rem;
+  padding: 4px 8px;
 }
