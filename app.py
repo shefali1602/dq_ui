@@ -72,5 +72,44 @@ def add_record():
       conn.close()
       return redirect(url_for('index'))
 
+@app.route('/update', methods=['POST'])
+def update_record():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    projid = request.form.get('PROJID')
+    action = request.form.get('action')  # 'save' or 'save_as_new'
+
+    fields = [
+        'DS_SOURCE', 'SOURCEFILE', 'SOURCEDIR', 'SOURCETABLE', 'SOURCECOLUMNS',
+        'NULLLOGFILE', 'DUPLICATELOGFILE', 'OUTPUTPATH', 'PKCOL', 'DBSCHEMA',
+        'TARGETLOGTABLE', 'DB_HOST', 'PORT', 'SERVICENAME', 'DBUSER',
+        'DBENCKEY', 'CHUNKSIZE'
+    ]
+
+    values = [request.form.get(field) for field in fields]
+
+    if action == 'save':
+        update_query = f"""
+            UPDATE OWNER_gb.DC_CONFIG SET
+            {", ".join([f"{field} = :{i+1}" for i, field in enumerate(fields)])}
+            WHERE PROJID = :{len(fields)+1}
+        """
+        cursor.execute(update_query, values + [projid])
+
+    elif action == 'save_as_new':
+        insert_query = f"""
+            INSERT INTO OWNER_gb.DC_CONFIG
+            (PROJID, {", ".join(fields)})
+            VALUES (:1, {", ".join([f":{i+2}" for i in range(len(fields))])})
+        """
+        cursor.execute(insert_query, [projid] + values)
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return redirect(url_for('index'))
+
 if __name__ == '__main__':
       app.run(debug= True)      

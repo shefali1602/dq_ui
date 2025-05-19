@@ -28,15 +28,16 @@ document.addEventListener('DOMContentLoaded', function () {
     observer.observe(document.body, { childList: true, subtree: true });
   });
 
-  function toggleDsSource() {
-    const section = document.getElementById("dsSourceSection");
-    const btn = document.querySelector(".ds-source-toggle button");
+  document.addEventListener('DOMContentLoaded', function () {
+    const editBtn = document.getElementById('editBtn');
+    const saveBtns = document.getElementById('saveBtns');
+    const inputs = document.querySelectorAll('#viewForm textarea, #viewForm input');
   
-    if (section.style.display === "none" || section.style.display === "") {
-      section.style.display = "flex";
-      btn.textContent = "DS_Source ▼";
-    } else {
-      section.style.display = "none";
-      btn.textContent = "DS_Source ▶";
+    if (editBtn) {
+      editBtn.addEventListener('click', () => {
+        inputs.forEach(el => el.removeAttribute('readonly'));
+        saveBtns.style.display = 'inline';
+        editBtn.style.display = 'none';
+      });
     }
-  }
+  });
