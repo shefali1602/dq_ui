@@ -24,6 +24,80 @@
   </div>
 
   <div class="container py-3">
+    {% if request.args.get('mode') == 'add' %}
+    <form method="POST" action="/add">
+      <!-- Block 1: Project Details -->
+      <div class="card mb-3 p-3">
+        <h6 class="mb-3">Block 1: Project Details</h6>
+        <div class="row g-2 align-items-center">
+          <div class="col-md-6">
+            <label class="col-form-label-sm">PROJID :</label>
+            <input type="text" name="PROJID" class="form-control form-control-sm" required />
+          </div>
+          <div class="col-md-6">
+            <label class="col-form-label-sm">Date of Validation :</label>
+            <input type="date" name="date_of_validation" class="form-control form-control-sm" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- DS_Source with toggle blocks -->
+      <div class="card mb-3 p-3">
+        <h6 class="mb-3">DS_Source</h6>
+        <div class="row">
+          <div class="col-md-6">
+            <button class="btn btn-sm btn-outline-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#block2" aria-expanded="true" aria-controls="block2">📁 Toggle File Details</button>
+            <div class="collapse show" id="block2">
+              {% for field in ['SOURCEFILE', 'SOURCEDIR', 'NULLLOGFILE', 'DUPLICATELOGFILE', 'OUTPUTPATH'] %}
+              <div class="row align-items-center mb-2">
+                <label class="col-auto col-form-label-sm">{{ field }} :</label>
+                <div class="col">
+                  <textarea name="{{ field }}" rows="1" class="form-control form-control-sm"></textarea>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <button class="btn btn-sm btn-outline-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#block3" aria-expanded="true" aria-controls="block3">📄 Toggle Table Details</button>
+            <div class="collapse show" id="block3">
+              {% for field in ['SOURCETABLE', 'SOURCECOLUMNS', 'PKCOL'] %}
+              <div class="row align-items-center mb-2">
+                <label class="col-auto col-form-label-sm">{{ field }} :</label>
+                <div class="col">
+                  <textarea name="{{ field }}" rows="1" class="form-control form-control-sm"></textarea>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 4: Connection Details -->
+      <div class="card mb-3 p-3">
+        <h6 class="mb-3">Block 4: Connection Details</h6>
+        <div class="row">
+          {% for field in ['DBSCHEMA', 'DB_HOST', 'PORT', 'SERVICENAME', 'DBUSER', 'DBENCKEY', 'CHUNKSIZE'] %}
+          <div class="col-md-6">
+            <div class="row align-items-center mb-2">
+              <label class="col-auto col-form-label-sm">{{ field }} :</label>
+              <div class="col">
+                <input type="{{ 'password' if field == 'DBENCKEY' else 'text' }}" name="{{ field }}" class="form-control form-control-sm" />
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="text-end">
+        <button type="submit" class="btn btn-sm btn-success">Save Record</button>
+      </div>
+    </form>
+    {% endif %}
+
     {% if request.args.get('mode') != 'add' %}
     <!-- Home screen: Select Project ID -->
     <form method="POST" action="/">
