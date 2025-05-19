@@ -16,7 +16,7 @@
     </div>
     <div>
       {% if request.args.get('mode') == 'add' %}
-        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-sm">← Back</a>
+        <a href="/" class="btn btn-outline-secondary btn-sm">← Back</a>
       {% else %}
         <a href="{{ url_for('index', mode='add') }}" class="btn btn-primary btn-sm">➕ Add New Record</a>
       {% endif %}
@@ -24,7 +24,8 @@
   </div>
 
   <div class="container py-3">
-    <!-- Block 1: Project Details (Visible by Default) -->
+    {% if request.args.get('mode') != 'add' %}
+    <!-- Home screen: Select Project ID -->
     <form method="POST" action="/">
       <div class="card p-3 mb-3">
         <h6 class="mb-3">Block 1: Project Details</h6>
@@ -49,13 +50,75 @@
       </div>
     </form>
 
-    {% if selected_id %}
-    <!-- Details View Section -->
-    <form method="POST" action="/add">
+    {% if selected_data %}
+    <form method="POST" action="/update">
       <div class="card mb-3 p-3">
         <h6 class="mb-3">DS_Source</h6>
         <div class="row">
-          <!-- Block 2 -->
+          <div class="col-md-6">
+            <h6 class="text-muted small">📁 Source File Details</h6>
+            {% for i in range(1, 6) %}
+            <div class="row align-items-center mb-2">
+              <label class="col-auto col-form-label-sm">{{ labels[i-1] }} :</label>
+              <div class="col">
+                <textarea name="{{ labels[i-1] }}" rows="1" class="form-control form-control-sm">{{ selected_data[i] }}</textarea>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="col-md-6">
+            <h6 class="text-muted small">📄 Source Table Details</h6>
+            {% for i in range(6, 9) %}
+            <div class="row align-items-center mb-2">
+              <label class="col-auto col-form-label-sm">{{ labels[i-1] }} :</label>
+              <div class="col">
+                <textarea name="{{ labels[i-1] }}" rows="1" class="form-control form-control-sm">{{ selected_data[i] }}</textarea>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3 p-3">
+        <h6 class="mb-3">Block 4: Connection Details</h6>
+        <div class="row">
+          {% for i in range(9, 16) %}
+          <div class="col-md-6">
+            <div class="row align-items-center mb-2">
+              <label class="col-auto col-form-label-sm">{{ labels[i] }} :</label>
+              <div class="col">
+                <textarea name="{{ labels[i] }}" rows="1" class="form-control form-control-sm">{{ selected_data[i+1] }}</textarea>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </form>
+    {% endif %}
+    {% endif %}
+
+    {% if request.args.get('mode') == 'add' %}
+    <!-- Add New Record screen -->
+    <form method="POST" action="/add">
+      <div class="card mb-3 p-3">
+        <h6 class="mb-3">Block 1: Project Details</h6>
+        <div class="row g-2 align-items-center">
+          <div class="col-md-5">
+            <label class="col-form-label-sm">PROJID :</label>
+            <input type="text" name="PROJID" class="form-control form-control-sm" required />
+          </div>
+          <div class="col-md-5">
+            <label class="col-form-label-sm">Date of Validation :</label>
+            <input type="date" name="date_of_validation" class="form-control form-control-sm" required />
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3 p-3">
+        <h6 class="mb-3">DS_Source</h6>
+        <div class="row">
           <div class="col-md-6">
             <h6 class="text-muted small">📁 Source File Details</h6>
             {% for field in ['SOURCEFILE', 'SOURCEDIR', 'NULLLOGFILE', 'DUPLICATELOGFILE', 'OUTPUTPATH'] %}
@@ -67,7 +130,6 @@
             </div>
             {% endfor %}
           </div>
-          <!-- Block 3 -->
           <div class="col-md-6">
             <h6 class="text-muted small">📄 Source Table Details</h6>
             {% for field in ['SOURCETABLE', 'SOURCECOLUMNS', 'PKCOL'] %}
@@ -82,7 +144,6 @@
         </div>
       </div>
 
-      <!-- Block 4: Connection Details -->
       <div class="card mb-3 p-3">
         <h6 class="mb-3">Block 4: Connection Details</h6>
         <div class="row">
@@ -91,7 +152,7 @@
             <div class="row align-items-center mb-2">
               <label class="col-auto col-form-label-sm">{{ field }} :</label>
               <div class="col">
-                <textarea name="{{ field }}" rows="1" class="form-control form-control-sm"></textarea>
+                <input type="{{ 'password' if field == 'DBENCKEY' else 'text' }}" name="{{ field }}" class="form-control form-control-sm" />
               </div>
             </div>
           </div>
