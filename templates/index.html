@@ -12,8 +12,8 @@
   <div class="d-flex justify-content-between align-items-center px-4 py-3 bg-white shadow-sm">
     <div class="d-flex align-items-center">
       <img src="{{ url_for('static', filename='logo.png') }}" class="logo me-2" alt="Logo" />
-      <h5 class="mb-0 text-primary">Data Quality Tool</h5>
     </div>
+    <h5 class="mb-0 text-primary text-center flex-grow-1">Data Quality Tool</h5>
     <div>
       {% if request.args.get('mode') == 'add' %}
         <a href="/" class="btn btn-outline-secondary btn-sm">← Back</a>
@@ -51,6 +51,12 @@
     </form>
 
     {% if selected_data %}
+    {% set labels = [
+      'DS_SOURCE', 'SOURCEFILE', 'SOURCEDIR', 'SOURCETABLE',
+      'SOURCECOLUMNS', 'NULLLOGFILE', 'DUPLICATELOGFILE', 'OUTPUTPATH',
+      'PKCOL', 'DBSCHEMA', 'TARGETLOGTABLE', 'DB_HOST', 'PORT',
+      'SERVICENAME', 'DBUSER', 'DBENCKEY', 'CHUNKSIZE'
+    ] %}
     <form method="POST" action="/update">
       <div class="card mb-3 p-3">
         <h6 class="mb-3">DS_Source</h6>
@@ -97,72 +103,6 @@
       </div>
     </form>
     {% endif %}
-    {% endif %}
-
-    {% if request.args.get('mode') == 'add' %}
-    <!-- Add New Record screen -->
-    <form method="POST" action="/add">
-      <div class="card mb-3 p-3">
-        <h6 class="mb-3">Block 1: Project Details</h6>
-        <div class="row g-2 align-items-center">
-          <div class="col-md-5">
-            <label class="col-form-label-sm">PROJID :</label>
-            <input type="text" name="PROJID" class="form-control form-control-sm" required />
-          </div>
-          <div class="col-md-5">
-            <label class="col-form-label-sm">Date of Validation :</label>
-            <input type="date" name="date_of_validation" class="form-control form-control-sm" required />
-          </div>
-        </div>
-      </div>
-
-      <div class="card mb-3 p-3">
-        <h6 class="mb-3">DS_Source</h6>
-        <div class="row">
-          <div class="col-md-6">
-            <h6 class="text-muted small">📁 Source File Details</h6>
-            {% for field in ['SOURCEFILE', 'SOURCEDIR', 'NULLLOGFILE', 'DUPLICATELOGFILE', 'OUTPUTPATH'] %}
-            <div class="row align-items-center mb-2">
-              <label class="col-auto col-form-label-sm">{{ field }} :</label>
-              <div class="col">
-                <textarea name="{{ field }}" rows="1" class="form-control form-control-sm"></textarea>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-          <div class="col-md-6">
-            <h6 class="text-muted small">📄 Source Table Details</h6>
-            {% for field in ['SOURCETABLE', 'SOURCECOLUMNS', 'PKCOL'] %}
-            <div class="row align-items-center mb-2">
-              <label class="col-auto col-form-label-sm">{{ field }} :</label>
-              <div class="col">
-                <textarea name="{{ field }}" rows="1" class="form-control form-control-sm"></textarea>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-
-      <div class="card mb-3 p-3">
-        <h6 class="mb-3">Block 4: Connection Details</h6>
-        <div class="row">
-          {% for field in ['DBSCHEMA', 'DB_HOST', 'PORT', 'SERVICENAME', 'DBUSER', 'DBENCKEY', 'CHUNKSIZE'] %}
-          <div class="col-md-6">
-            <div class="row align-items-center mb-2">
-              <label class="col-auto col-form-label-sm">{{ field }} :</label>
-              <div class="col">
-                <input type="{{ 'password' if field == 'DBENCKEY' else 'text' }}" name="{{ field }}" class="form-control form-control-sm" />
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-      <div class="text-end">
-        <button type="submit" class="btn btn-sm btn-success">Save Record</button>
-      </div>
-    </form>
     {% endif %}
   </div>
 
