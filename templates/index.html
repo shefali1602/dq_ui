@@ -2,80 +2,123 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Project Layout</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Data Quality Tool</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-  <!-- Header with logo -->
-  <div class="header">
-    <img src="/static/logo.png" alt="Logo" class="logo" />
-    <p class="logo-title">Data Quality Tool</p>
+  <div class="container py-3">
+    {% if request.args.get('mode') != 'add' %}
+    <!-- Block 1: Project Details with dropdown and View button -->
+    <form method="POST" action="/">
+      <div class="card mb-3 p-3">
+        <h6 class="mb-3">Block 1: Project Details</h6>
+        <div class="row g-3 align-items-center">
+          <div class="col-md-6">
+            <label class="form-label">PROJID</label>
+            <select id="projectDropdown" name="selected_id" class="form-select form-select-sm" required>
+              {% for id in ids %}
+              <option value="{{ id }}" {% if id == selected_id %}selected{% endif %}>{{ id }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Date of Validation</label>
+            <input type="date" name="date_of_validation" class="form-control form-control-sm" required />
+          </div>
+          <div class="col-md-2 text-end">
+            <label class="form-label invisible">View</label>
+            <button type="submit" class="btn btn-primary btn-sm w-100">View Details</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="text-end mb-3">
+      <a href="{{ url_for('index', mode='add') }}" class="btn btn-outline-primary btn-sm">➕ Add New Record</a>
+    </div>
+    {% endif %}
+
+    {% if request.args.get('mode') == 'add' %}
+    <form method="POST" action="/add">
+      <!-- Block 1: Project Details -->
+      <div class="card mb-3 p-3">
+        <h6 class="mb-3">Block 1: Project Details</h6>
+        <div class="row g-3 align-items-center">
+          <div class="col-md-6">
+            <label class="form-label">PROJID</label>
+            <input type="text" name="PROJID" class="form-control form-control-sm" required />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Date of Validation</label>
+            <input type="date" name="date_of_validation" class="form-control form-control-sm" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 2 & 3 under DS_Source -->
+      <div class="card mb-3 p-3">
+        <h6 class="mb-3">DS_Source</h6>
+        <div class="row">
+          <!-- Block 2: Source File Details -->
+          <div class="col-md-6">
+            <button class="btn btn-sm btn-outline-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#block2">📁 Toggle File Details</button>
+            <div id="block2" class="collapse show">
+              <div class="row g-2">
+                {% for field in ['SOURCEFILE', 'SOURCEDIR', 'NULLLOGFILE', 'DUPLICATELOGFILE', 'OUTPUTPATH'] %}
+                <div class="row align-items-center mb-2">
+                  <label class="col-auto col-form-label-sm fw-medium">{{ field }}:</label>
+                  <div class="col">
+                    <input type="text" name="{{ field }}" class="form-control form-control-sm" required />
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Block 3: Source Table Details -->
+          <div class="col-md-6">
+            <button class="btn btn-sm btn-outline-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#block3">📄 Toggle Table Details</button>
+            <div id="block3" class="collapse show">
+              <div class="row g-2">
+                {% for field in ['SOURCETABLE', 'SOURCECOLUMNS', 'PKCOL'] %}
+                <div class="row align-items-center mb-2">
+                  <label class="col-auto col-form-label-sm fw-medium">{{ field }}:</label>
+                  <div class="col">
+                    <input type="text" name="{{ field }}" class="form-control form-control-sm" required />
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 4: Connection Details -->
+      <div class="card mb-3 p-3">
+        <h6 class="mb-3">Block 4: Connection Details</h6>
+        <div class="row g-3">
+          {% for field in ['DBSCHEMA', 'DB_HOST', 'PORT', 'SERVICENAME', 'DBUSER', 'DBENCKEY', 'CHUNKSIZE'] %}
+          <div class="row align-items-center mb-2">
+            <label class="col-auto col-form-label-sm fw-medium">{{ field }}:</label>
+            <div class="col">
+              <input type="{{ 'password' if field == 'DBENCKEY' else 'text' }}" name="{{ field }}" class="form-control form-control-sm" required />
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="text-end">
+        <button type="submit" class="btn btn-primary btn-sm">Save Record</button>
+      </div>
+    </form>
+    {% endif %}
   </div>
 
-  <div class="container">
-
-    <!-- Add New Record Button -->
-    <div class="add-record">
-      <button onclick="location.href='add-record.html'">Add New Record</button>
-    </div>
-
-    <!-- Block 1: Project Details -->
-    <div class="block block1">
-      <div class="block-header">
-        <h3>Project Details</h3>
-        <button class="view-btn">View Details</button>
-      </div>
-      <div class="field">
-        <label for="projid">PROJID</label>
-        <input type="text" id="projid" />
-      </div>
-      <div class="field">
-        <label for="date">Date of Validation</label>
-        <input type="date" id="date" />
-      </div>
-    </div>
-
-    <!-- DS_Source Toggle -->
-    <div class="ds-source-toggle">
-      <button onclick="toggleDsSource()">DS_Source ▼</button>
-    </div>
-
-    <!-- DS_Source Blocks -->
-    <div id="dsSourceSection" class="ds-source">
-      <!-- Block 2: Source File Details -->
-      <div class="block block2">
-        <h3>Source File Details</h3>
-        <div class="field"><label>SOURCEFILE</label><input type="text" /></div>
-        <div class="field"><label>SOURCEDIR</label><input type="text" /></div>
-        <div class="field"><label>NULLLOGFILE</label><input type="text" /></div>
-        <div class="field"><label>DUPLICATELOGFILE</label><input type="text" /></div>
-        <div class="field"><label>OUTPUTPATH</label><input type="text" /></div>
-      </div>
-
-      <!-- Block 3: Source Table Details -->
-      <div class="block block3">
-        <h3>Source Table Details</h3>
-        <div class="field"><label>SOURCETABLE</label><input type="text" /></div>
-        <div class="field"><label>SOURCECOLUMNS</label><input type="text" /></div>
-        <div class="field"><label>PKCOL</label><input type="text" /></div>
-      </div>
-    </div>
-
-    <!-- Block 4: Connection Details -->
-    <div class="block block4">
-      <h3>Connection Details</h3>
-      <div class="field"><label>DBSCHEMA</label><input type="text" /></div>
-      <div class="field"><label>DB_HOST</label><input type="text" /></div>
-      <div class="field"><label>PORT</label><input type="text" /></div>
-      <div class="field"><label>SERVICENAME</label><input type="text" /></div>
-      <div class="field"><label>DBUSER</label><input type="text" /></div>
-      <div class="field"><label>DBENCKEY</label><input type="text" /></div>
-      <div class="field"><label>CHUNKSIZE</label><input type="text" /></div>
-    </div>
-
-  </div>
-
-  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
